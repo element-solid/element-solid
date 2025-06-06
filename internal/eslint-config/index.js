@@ -251,7 +251,7 @@ module.exports = defineConfig({
             position: 'before',
           },
           {
-            pattern: '@element-plus/**',
+            pattern: '@element-solid/**',
             group: 'internal',
           },
         ],
@@ -264,21 +264,6 @@ module.exports = defineConfig({
     'import/no-named-as-default': 'off',
     'import/no-named-as-default-member': 'off',
     'import/named': 'off',
-    'no-restricted-imports': [
-      'error',
-      {
-        paths: [
-          { name: 'lodash', message: 'Use lodash-unified instead.' },
-          { name: 'lodash-es', message: 'Use lodash-unified instead.' },
-        ],
-        patterns: [
-          {
-            group: ['lodash/*', 'lodash-es/*'],
-            message: 'Use lodash-unified instead.',
-          },
-        ],
-      },
-    ],
 
     // eslint-plugin-eslint-comments
     'eslint-comments/disable-enable-pair': ['error', { allowWholeFile: true }],

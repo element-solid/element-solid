@@ -16,13 +16,13 @@
     "rootDir": ".",
     "types": [],
     "paths": {
-      "@element-plus/components": ["packages/components"],
-      "@element-plus/utils": ["packages/utils"],
-      "@element-plus/hooks": ["packages/hooks"],
-      "@element-plus/directives": ["packages/directives"],
-      "@element-plus/constants": ["packages/constants"],
-      "@element-plus/locale": ["packages/locale"],
-      "element-plus": ["packages/element-plus"]
+      "@element-solid/components": ["packages/components"],
+      "@element-solid/utils": ["packages/utils"],
+      "@element-solid/hooks": ["packages/hooks"],
+      "@element-solid/directives": ["packages/directives"],
+      "@element-solid/constants": ["packages/constants"],
+      "@element-solid/locale": ["packages/locale"],
+      "element-solid": ["packages/element-solid"]
     },
     "preserveSymlinks": true
   }

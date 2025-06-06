@@ -49,7 +49,7 @@ const emit = defineEmits(${PROP_NAME}Emits)
 EOF
 
 cat > $DIRNAME/src/$INPUT_NAME.ts <<EOF
-import { buildProps } from '@element-plus/utils'
+import { buildProps } from '@element-solid/utils'
 
 import type { ExtractPropTypes } from 'vue'
 
@@ -67,9 +67,9 @@ export type ${NAME}Instance = InstanceType<typeof $NAME> & unknown
 EOF
 
 cat <<EOF >"$DIRNAME/index.ts"
-import { withInstall } from '@element-plus/utils'
+import { withInstall } from '@element-solid/utils'
 import $NAME from './src/$INPUT_NAME.vue'
-import type { SFCWithInstall } from '@element-plus/utils'
+import type { SFCWithInstall } from '@element-solid/utils'
 
 export const El$NAME: SFCWithInstall<typeof $NAME> = withInstall($NAME)
 export default El$NAME
@@ -95,13 +95,13 @@ describe('$NAME.vue', () => {
 EOF
 
 cat > $DIRNAME/style/index.ts <<EOF
-import '@element-plus/components/base/style'
-import '@element-plus/theme-chalk/src/$INPUT_NAME.scss'
+import '@element-solid/components/base/style'
+import '@element-solid/theme-chalk/src/$INPUT_NAME.scss'
 EOF
 
 cat > $DIRNAME/style/css.ts <<EOF
-import '@element-plus/components/base/style/css'
-import '@element-plus/theme-chalk/el-$INPUT_NAME.css'
+import '@element-solid/components/base/style/css'
+import '@element-solid/theme-chalk/el-$INPUT_NAME.css'
 EOF
 
 cat > $FILE_PATH/theme-chalk/src/$INPUT_NAME.scss <<EOF

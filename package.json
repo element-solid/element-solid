@@ -44,15 +44,14 @@
     "vue": "^3.2.0"
   },
   "dependencies": {
-    "@element-plus/components": "workspace:*",
-    "@element-plus/constants": "workspace:*",
-    "@element-plus/directives": "workspace:*",
-    "@element-plus/hooks": "workspace:*",
-    "@element-plus/icons-vue": "^2.3.1",
-    "@element-plus/locale": "workspace:*",
-    "@element-plus/test-utils": "workspace:*",
-    "@element-plus/theme-chalk": "workspace:*",
-    "@element-plus/utils": "workspace:*",
+    "@element-solid/components": "workspace:*",
+    "@element-solid/constants": "workspace:*",
+    "@element-solid/directives": "workspace:*",
+    "@element-solid/hooks": "workspace:*",
+    "@element-solid/locale": "workspace:*",
+    "@element-solid/test-utils": "workspace:*",
+    "@element-solid/theme-chalk": "workspace:*",
+    "@element-solid/utils": "workspace:*",
     "@floating-ui/dom": "^1.0.1",
     "@popperjs/core": "npm:@sxzz/popperjs-es@^2.11.7",
     "@types/lodash": "^4.14.182",
@@ -65,18 +64,21 @@
     "lodash-es": "^4.17.21",
     "lodash-unified": "^1.0.2",
     "memoize-one": "^6.0.0",
-    "normalize-wheel-es": "^1.2.0"
+    "normalize-wheel-es": "^1.2.0",
+    "solid-js": "^1.9.7",
+    "solid-transition-group": "^0.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.6.1",
     "@commitlint/config-conventional": "^18.6.3",
-    "@element-plus/build": "workspace:^0.0.1",
-    "@element-plus/build-utils": "workspace:^0.0.1",
-    "@element-plus/eslint-config": "workspace:*",
+    "@element-solid/build": "workspace:^0.0.1",
+    "@element-solid/build-utils": "workspace:^0.0.1",
+    "@element-solid/eslint-config": "workspace:*",
     "@esbuild-kit/cjs-loader": "^2.2.1",
     "@pnpm/find-workspace-packages": "^4.0.16",
     "@pnpm/logger": "^4.0.0",
     "@pnpm/types": "^8.4.0",
+    "@purge-icons/generated": "^0.10.0",
     "@types/fs-extra": "^9.0.13",
     "@types/gulp": "^4.0.9",
     "@types/jsdom": "^16.2.14",
@@ -113,8 +115,6 @@
     "typescript": "~5.5.4",
     "unplugin-vue-macros": "^2.7.11",
     "vitest": "^2.0.5",
-    "vue": "^3.2.37",
-    "vue-router": "^4.0.16",
     "vue-tsc": "^2.0.28"
   },
   "engines": {
@@ -123,18 +123,6 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-git"
-    }
-  },
-  "pnpm": {
-    "peerDependencyRules": {
-      "ignoreMissing": [
-        "vite",
-        "react",
-        "react-dom"
-      ]
-    },
-    "patchedDependencies": {
-      "async-validator@4.2.5": "patches/async-validator@4.2.5.patch"
     }
   },
   "lint-staged": {

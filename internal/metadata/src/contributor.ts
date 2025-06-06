@@ -10,12 +10,12 @@ import {
   errorAndExit,
   projRoot,
   writeJson,
-} from '@element-plus/build-utils'
+} from '@element-solid/build-utils'
 import {
   REPO_BRANCH,
   REPO_NAME,
   REPO_OWNER,
-} from '@element-plus/build-constants'
+} from '@element-solid/build-constants'
 
 interface FetchOption {
   key: string

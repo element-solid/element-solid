@@ -4,7 +4,7 @@ import ts from 'typescript'
 import glob from 'fast-glob'
 import { copy, remove } from 'fs-extra'
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor'
-import { buildOutput, epRoot, projRoot } from '@element-plus/build-utils'
+import { buildOutput, epRoot, projRoot } from '@element-solid/build-utils'
 import { pathRewriter, run } from '../utils'
 
 export const generateTypesDefinitions = async () => {
@@ -44,7 +44,7 @@ export const generateTypesDefinitions = async () => {
             lib: tsConfig.config.compilerOptions.lib,
             paths: {
               'element-plus': [entryFilePath],
-              '@element-plus/*': [`${typesDir}/*`],
+              '@element-solid/*': [`${typesDir}/*`],
             },
             skipLibCheck: true,
           },
@@ -71,7 +71,7 @@ export const generateTypesDefinitions = async () => {
 
   await writeFile(entryFilePath, formattedText, 'utf8')
 
-  // "@element-plus" should be replaced with "element-plus"
+  // "@element-solid" should be replaced with "element-plus"
   const filePaths = await glob(`**/*.d.ts`, {
     cwd: typesDir,
     absolute: true,
