@@ -1,17 +1,14 @@
-import { isClient } from '../browser'
-import { easeInOutCubic } from '../easings'
-import { isFunction, isWindow } from '../types'
-import { cAF, rAF } from '../raf'
+import { isServer } from 'solid-js/web'
 import { getStyle } from './style'
 
 export const isScroll = (el: HTMLElement, isVertical?: boolean): boolean => {
-  if (!isClient) return false
+  if (isServer) return false
 
   const key = (
     {
       undefined: 'overflow',
-      true: 'overflow-y',
-      false: 'overflow-x',
+      true: 'overflowY',
+      false: 'overflowX',
     } as const
   )[String(isVertical)]!
   const overflow = getStyle(el, key)
@@ -22,7 +19,7 @@ export const getScrollContainer = (
   el: HTMLElement,
   isVertical?: boolean
 ): Window | HTMLElement | undefined => {
-  if (!isClient) return
+  if (isServer) return
 
   let parent: HTMLElement = el
   while (parent) {
@@ -39,7 +36,7 @@ export const getScrollContainer = (
 
 let scrollBarWidth: number
 export const getScrollBarWidth = (namespace: string): number => {
-  if (!isClient) return 0
+  if (isServer) return 0
   if (scrollBarWidth !== undefined) return scrollBarWidth
 
   const outer = document.createElement('div')
@@ -62,99 +59,4 @@ export const getScrollBarWidth = (namespace: string): number => {
   scrollBarWidth = widthNoScroll - widthWithScroll
 
   return scrollBarWidth
-}
-
-/**
- * Scroll with in the container element, positioning the **selected** element at the top
- * of the container
- */
-export function scrollIntoView(
-  container: HTMLElement,
-  selected: HTMLElement
-): void {
-  if (!isClient) return
-
-  if (!selected) {
-    container.scrollTop = 0
-    return
-  }
-
-  const offsetParents: HTMLElement[] = []
-  let pointer = selected.offsetParent
-  while (
-    pointer !== null &&
-    container !== pointer &&
-    container.contains(pointer)
-  ) {
-    offsetParents.push(pointer as HTMLElement)
-    pointer = (pointer as HTMLElement).offsetParent
-  }
-  const top =
-    selected.offsetTop +
-    offsetParents.reduce((prev, curr) => prev + curr.offsetTop, 0)
-  const bottom = top + selected.offsetHeight
-  const viewRectTop = container.scrollTop
-  const viewRectBottom = viewRectTop + container.clientHeight
-
-  if (top < viewRectTop) {
-    container.scrollTop = top
-  } else if (bottom > viewRectBottom) {
-    container.scrollTop = bottom - container.clientHeight
-  }
-}
-
-export function animateScrollTo(
-  container: HTMLElement | Window,
-  from: number,
-  to: number,
-  duration: number,
-  callback?: unknown
-) {
-  const startTime = Date.now()
-
-  let handle: number | undefined
-  const scroll = () => {
-    const timestamp = Date.now()
-    const time = timestamp - startTime
-    const nextScrollTop = easeInOutCubic(
-      time > duration ? duration : time,
-      from,
-      to,
-      duration
-    )
-
-    if (isWindow(container)) {
-      container.scrollTo(window.pageXOffset, nextScrollTop)
-    } else {
-      container.scrollTop = nextScrollTop
-    }
-    if (time < duration) {
-      handle = rAF(scroll)
-    } else if (isFunction(callback)) {
-      callback()
-    }
-  }
-
-  scroll()
-
-  return () => {
-    handle && cAF(handle)
-  }
-}
-
-export const getScrollElement = (
-  target: HTMLElement,
-  container: HTMLElement | Window
-) => {
-  if (isWindow(container)) {
-    return target.ownerDocument.documentElement
-  }
-  return container
-}
-
-export const getScrollTop = (container: HTMLElement | Window) => {
-  if (isWindow(container)) {
-    return window.scrollY
-  }
-  return container.scrollTop
 }

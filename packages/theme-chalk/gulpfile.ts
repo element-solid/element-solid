@@ -9,7 +9,7 @@ import rename from 'gulp-rename'
 import consola from 'consola'
 import postcss from 'postcss'
 import cssnano from 'cssnano'
-import { epOutput } from '@element-plus/build-utils'
+import { epOutput } from '@element-solid/build-utils'
 import type Vinly from 'vinyl'
 
 const distFolder = path.resolve(__dirname, 'dist')
