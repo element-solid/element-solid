@@ -39,7 +39,12 @@ export function classNames(
   })
   return classList.join(' ')
 }
-
+export function classList(cls: Recordable) {
+  return Object.keys(cls).reduce((o, i) => {
+    o[i] = !!cls[i]
+    return o
+  }, {} as Recordable<boolean>)
+}
 export const getStyle = (
   element: HTMLElement,
   styleName: keyof CSSStyleDeclaration

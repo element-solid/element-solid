@@ -3,11 +3,12 @@
   "compilerOptions": {
     "composite": true,
     "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "lib": ["ES2018", "DOM", "DOM.Iterable"],
     "types": ["unplugin-vue-macros/macros-global"],
     "skipLibCheck": true
   },
-  "include": ["packages", "typings/env.d.ts"],
+  "include": ["packages", "typings/env.d.ts", "typings/help.d.ts"],
   "exclude": [
     "node_modules",
     "**/dist",
