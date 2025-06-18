@@ -1,2 +1,2 @@
-export { default as Message } from './src/index';
-export * from './src/props';
+export { default as Message } from './src/method'
+export * from './src/props'

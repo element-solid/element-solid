@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'solid-js'
-import { RadioGroupInstance } from '../props'
+import { RadioGroupProps } from '../props'
 
-export const RadioGroupContext = createContext<RadioGroupInstance>()
+export const RadioGroupContext = createContext<RadioGroupProps>()
 
 export function useRadioGroupContext() {
   return useContext(RadioGroupContext)
