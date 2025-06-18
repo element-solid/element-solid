@@ -1,6 +1,7 @@
 import { RuleItem, ValidateError, ValidateFieldsError } from 'async-validator'
 import { Accessor, JSX } from 'solid-js'
 import { ComponentSize } from '@element-solid/constants'
+import { Arrayable } from '@element-solid/utils'
 
 export interface FormItemRule extends RuleItem {
   trigger?: Arrayable<string>
@@ -65,7 +66,7 @@ export interface FormInstance {
 
 export interface FormProps {
   ref?: FormInstance | (() => FormInstance)
-  model: Recordable
+  model: Record<string, any>
   rules?: Partial<Record<string, Arrayable<FormItemRule>>>
   labelPosition?: 'left' | 'right' | 'top'
   requireAsteriskPosition?: 'left' | 'right'

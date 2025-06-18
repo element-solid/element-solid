@@ -1,9 +1,10 @@
 import { isArray, isFunction } from 'lodash-es'
-import { Accessor, JSX } from 'solid-js'
+import { Accessor } from 'solid-js'
 import {
-  useClickOutside,
   UseClickOutsideOptions,
+  useClickOutside,
 } from '@element-solid/hooks/use-click-outside'
+
 type Handler = (event: MouseEvent) => void
 
 declare module 'solid-js' {

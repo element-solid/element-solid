@@ -41,6 +41,7 @@
     "postinstall": "pnpm stub && concurrently \"pnpm gen:version\" \"pnpm run -C internal/metadata dev\""
   },
   "peerDependencies": {
+    "@solidjs/router": "^0.15.3",
     "solid-js": "catalog:"
   },
   "dependencies": {

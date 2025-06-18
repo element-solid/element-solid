@@ -44,6 +44,9 @@ importers:
       '@popperjs/core':
         specifier: npm:@sxzz/popperjs-es@^2.11.7
         version: '@sxzz/popperjs-es@2.11.7'
+      '@solidjs/router':
+        specifier: ^0.15.3
+        version: 0.15.3(solid-js@1.9.7)
       '@types/lodash':
         specifier: ^4.14.182
         version: 4.17.17
@@ -113,7 +116,7 @@ importers:
         version: 0.10.0
       '@solidjs/testing-library':
         specifier: ^0.8.10
-        version: 0.8.10(solid-js@1.9.7)
+        version: 0.8.10(@solidjs/router@0.15.3(solid-js@1.9.7))(solid-js@1.9.7)
       '@types/fs-extra':
         specifier: ^9.0.13
         version: 9.0.13
@@ -2789,6 +2792,11 @@ packages:
     resolution: {integrity: sha512-4/Z59nnwu4MPR//zWZmZm2yftx24jMqQ8CSd/JobL26TPfbn4Ph8GKNVJfGJWShg1QB98qObJSskqizbTvcLLA==}
     peerDependencies:
       solid-js: ^1.6.12
+
+  '@solidjs/router@0.15.3':
+    resolution: {integrity: sha512-iEbW8UKok2Oio7o6Y4VTzLj+KFCmQPGEpm1fS3xixwFBdclFVBvaQVeibl1jys4cujfAK5Kn6+uG2uBm3lxOMw==}
+    peerDependencies:
+      solid-js: ^1.8.6
 
   '@solidjs/testing-library@0.8.10':
     resolution: {integrity: sha512-qdeuIerwyq7oQTIrrKvV0aL9aFeuwTd86VYD3afdq5HYEwoox1OBTJy4y8A3TFZr8oAR0nujYgCzY/8wgHGfeQ==}
@@ -11993,10 +12001,16 @@ snapshots:
     dependencies:
       solid-js: 1.9.7
 
-  '@solidjs/testing-library@0.8.10(solid-js@1.9.7)':
+  '@solidjs/router@0.15.3(solid-js@1.9.7)':
+    dependencies:
+      solid-js: 1.9.7
+
+  '@solidjs/testing-library@0.8.10(@solidjs/router@0.15.3(solid-js@1.9.7))(solid-js@1.9.7)':
     dependencies:
       '@testing-library/dom': 10.4.0
       solid-js: 1.9.7
+    optionalDependencies:
+      '@solidjs/router': 0.15.3(solid-js@1.9.7)
 
   '@sxzz/popperjs-es@2.11.7': {}
 

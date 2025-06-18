@@ -1,19 +1,28 @@
-import { Component, createEffect, createSignal, JSX, mergeProps, Show } from 'solid-js';
-import { isServer, Portal } from 'solid-js/web';
-import { Transition } from 'solid-transition-group';
-import { useLocale } from '@element-solid/hooks';
-import { useNamespace } from '@element-solid/hooks';
-import { useZIndex } from '@element-solid/hooks';
-import { useDraggable } from '@element-solid/hooks';
-import { useEscapeKeydown } from '@element-solid/hooks';
-import { useLockscreen } from '@element-solid/hooks';
-import { addUnit, classNames } from '@element-solid/utils';
-import { nextTick } from '@element-solid/utils';
-import { Icon } from '../../icon';
-import { Overlay } from '../../overlay';
-import { DialogInstance, DialogProps } from './props';
-import { Position } from 'packages/hooks/type';
+import {
+  Component,
+  JSX,
+  Show,
+  createEffect,
+  createSignal,
+  mergeProps,
+} from 'solid-js'
+import { Portal, isServer } from 'solid-js/web'
+import { Transition } from 'solid-transition-group'
+import { Position } from 'packages/hooks/type'
+import {
+  useDraggable,
+  useEscapeKeydown,
+  useLocale,
+  useLockscreen,
+  useNamespace,
+  useZIndex,
+} from '@element-solid/hooks'
 
+import { Fn, addUnit, classNames, nextTick } from '@element-solid/utils'
+
+import { Icon } from '../../icon'
+import { Overlay } from '../../overlay'
+import { DialogInstance, DialogProps } from './props'
 
 const defaultProps: Partial<DialogProps> = {
   closeIcon: 'ep:close',
@@ -23,21 +32,22 @@ const defaultProps: Partial<DialogProps> = {
   escClosable: true,
   showClose: true,
   lockScroll: true,
-};
+}
 
 const Dialog: Component<DialogProps> = (_props) => {
-  const props = mergeProps(defaultProps, _props);
-  const ns = useNamespace('dialog');
-  const { t } = useLocale();
-  const [zIndex, setZIndex] = createSignal(props.zIndex || useZIndex());
-  const [visible, setVisible] = createSignal(!!props.visible);
-  let headerRef: HTMLHeadElement;
-  let dialogRef: HTMLDivElement;
-  let transform: Position;
+  const props = mergeProps(defaultProps, _props)
+  const ns = useNamespace('dialog')
+  const { t } = useLocale()
+  const [zIndex, setZIndex] = createSignal(props.zIndex || useZIndex())
+  const [visible, setVisible] = createSignal(!!props.visible)
+  let headerRef: HTMLHeadElement
+  let dialogRef: HTMLDivElement
+  let transform: Position
 
-  const overlayDialogStyle = () => props.alignCenter ? { display: 'flex' } : {};
+  const overlayDialogStyle = () =>
+    props.alignCenter ? { display: 'flex' } : {}
   const style = () => {
-    const style: JSX.CSSProperties = {};
+    const style: JSX.CSSProperties = {}
     const varPrefix = `--${ns.namespace}-dialog` as const
     if (!props.fullscreen) {
       if (props.top) {
@@ -48,48 +58,50 @@ const Dialog: Component<DialogProps> = (_props) => {
       }
     }
     if (transform) {
-      style.transform = `translate(${addUnit(transform.x)}, ${addUnit(transform.y)})`
+      style.transform = `translate(${addUnit(transform.x)}, ${addUnit(
+        transform.y
+      )})`
     }
     return style
   }
   if (props.lockScroll) {
-    useLockscreen(visible);
+    useLockscreen(visible)
   }
   {
-    (props.ref as (el: DialogInstance) => void)?.({
+    ;(props.ref as (el: DialogInstance) => void)?.({
       open: doOpen,
       close: doClose,
-      visible
+      visible,
     })
   }
   createEffect(() => {
-    props.visible ? doOpen() : doClose();
+    props.visible ? doOpen() : doClose()
   })
   createEffect((prev?: Fn) => {
-    prev?.();
+    prev?.()
     if (visible() && props.draggable) {
       return useDraggable(() => headerRef, {
         initialValue: transform,
         targetAccessor: () => dialogRef,
-        onEnd: (pos) => transform = pos
+        onEnd: (pos) => (transform = pos),
       })
     }
   })
 
   function doOpen() {
     if (isServer) return
-    setZIndex(props.zIndex || useZIndex());
-    setVisible(true);
+    setZIndex(props.zIndex || useZIndex())
+    setVisible(true)
     nextTick(() => props.onOpen?.())
   }
   function doClose() {
-    setVisible(false);
-    nextTick(() => props.onClose?.());
+    setVisible(false)
+    nextTick(() => props.onClose?.())
   }
   async function handleClose() {
-    const shouldClose = (await props.beforeClose?.()) ?? true;
+    const shouldClose = (await props.beforeClose?.()) ?? true
     if (shouldClose) {
-      doClose();
+      doClose()
     }
   }
   function handleMaskClick() {
@@ -101,53 +113,67 @@ const Dialog: Component<DialogProps> = (_props) => {
     useEscapeKeydown(handleClose)
   }
 
-  return <Portal mount={document.body}>
-    <Transition name="dialog-fade" appear>
-      <Show when={visible()}>
-        <Overlay
-          mask={props.mask}
-          zIndex={zIndex()}
-          onClick={handleMaskClick}
-        >
-          <div
-            role="dialog"
-            aria-model="true"
-            class={ns.namespace + '-overlay-dialog'} style={overlayDialogStyle()}>
+  return (
+    <Portal mount={document.body}>
+      <Transition name="dialog-fade" appear>
+        <Show when={visible()}>
+          <Overlay
+            mask={props.mask}
+            zIndex={zIndex()}
+            onClick={handleMaskClick}
+          >
             <div
-              ref={ref => dialogRef = ref}
-              class={classNames(ns.b(),
-                ns.is('fullscreen', props.fullscreen),
-                ns.is('draggable', props.draggable),
-                ns.is('align-center', props.alignCenter),
-                { [ns.m('center')]: props.center })}
-              style={style()}
-              onClick={e => e.stopPropagation()}
+              role="dialog"
+              aria-model="true"
+              class={`${ns.namespace}-overlay-dialog`}
+              style={overlayDialogStyle()}
             >
-              <header class={ns.e('header')} ref={ref => headerRef = ref}>
-                <Show when={props.header} fallback={<span role="heading" class={ns.e('title')}> {props.title}</span>}>
-                  {props.header}
+              <div
+                ref={(ref) => (dialogRef = ref)}
+                class={classNames(
+                  ns.b(),
+                  ns.is('fullscreen', props.fullscreen),
+                  ns.is('draggable', props.draggable),
+                  ns.is('align-center', props.alignCenter),
+                  { [ns.m('center')]: props.center }
+                )}
+                style={style()}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <header class={ns.e('header')} ref={(ref) => (headerRef = ref)}>
+                  <Show
+                    when={props.header}
+                    fallback={
+                      <span role="heading" class={ns.e('title')}>
+                        {' '}
+                        {props.title}
+                      </span>
+                    }
+                  >
+                    {props.header}
+                  </Show>
+                  <Show when={props.closeIcon && props.showClose}>
+                    <button
+                      aria-label={t('el.dialog.close')}
+                      class={ns.e('headerbtn')}
+                      type="button"
+                      onClick={handleClose}
+                    >
+                      <Icon class={ns.e('close')} icon={props.closeIcon!} />
+                    </button>
+                  </Show>
+                </header>
+                <div class={ns.e('body')}>{props.children}</div>
+                <Show when={props.footer}>
+                  <footer class={ns.e('footer')}>{props.footer}</footer>
                 </Show>
-                <Show when={props.closeIcon && props.showClose}>
-                  <button aria-label={t('el.dialog.close')} class={ns.e('headerbtn')} type="button" onClick={handleClose}>
-                    <Icon class={ns.e('close')} icon={props.closeIcon!} />
-                  </button>
-                </Show>
-              </header>
-              <div class={ns.e('body')}>
-                {props.children}
               </div>
-              <Show when={props.footer}>
-                <footer class={ns.e('footer')}>
-                  {props.footer}
-                </footer>
-              </Show>
             </div>
-          </div>
-        </Overlay>
-      </Show>
-    </Transition>
-  </Portal>
+          </Overlay>
+        </Show>
+      </Transition>
+    </Portal>
+  )
 }
 
-export default Dialog;
-
+export default Dialog

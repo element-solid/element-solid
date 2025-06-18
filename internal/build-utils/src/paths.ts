@@ -18,8 +18,8 @@ export const vpRoot = resolve(docRoot, '.vitepress')
 
 /** `/dist` */
 export const buildOutput = resolve(projRoot, 'dist')
-/** `/dist/element-plus` */
-export const epOutput = resolve(buildOutput, 'element-plus')
+/** `/dist/element-solid` */
+export const epOutput = resolve(buildOutput, 'element-solid')
 
 export const projPackage = resolve(projRoot, 'package.json')
 export const compPackage = resolve(compRoot, 'package.json')

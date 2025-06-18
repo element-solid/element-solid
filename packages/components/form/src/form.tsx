@@ -1,11 +1,18 @@
-import { ValidateFieldsError } from "async-validator";
-import { castArray, isFunction } from "lodash-es";
-import { Component, createEffect, createMemo, mergeProps, on } from "solid-js";
-import { useGlobalConfig, useNamespace } from "@element-solid/hooks";
-import { classNames } from "@element-solid/utils";
-import { debugWarn } from "@element-solid/utils";
-import { FormContextInstance, FormInstance, FormItemContextInstance, FormItemProp, FormProps, FormValidateCallback } from "./type";
-import { FormContext } from "./hooks/use-form-context";
+import { ValidateFieldsError } from 'async-validator'
+import { castArray, isFunction } from 'lodash-es'
+import { Component, createEffect, createMemo, mergeProps, on } from 'solid-js'
+import { useGlobalConfig, useNamespace } from '@element-solid/hooks'
+import { Arrayable, classNames, debugWarn } from '@element-solid/utils'
+
+import {
+  FormContextInstance,
+  FormInstance,
+  FormItemContextInstance,
+  FormItemProp,
+  FormProps,
+  FormValidateCallback,
+} from './type'
+import { FormContext } from './hooks/use-form-context'
 
 const defaultProps: Partial<FormProps> = {
   labelPosition: 'right',
@@ -14,13 +21,13 @@ const defaultProps: Partial<FormProps> = {
   hideRequiredAsterisk: true,
 }
 const Form: Component<FormProps> = (_props) => {
-  const props = mergeProps(defaultProps, _props);
+  const props = mergeProps(defaultProps, _props)
 
-  const ns = useNamespace('form');
-  const config = useGlobalConfig();
-  const formSize = () => props.size || config.size;
+  const ns = useNamespace('form')
+  const config = useGlobalConfig()
+  const formSize = () => props.size || config.size
 
-  const fields: FormItemContextInstance[] = [];
+  const fields: FormItemContextInstance[] = []
 
   const formExpose: FormInstance = {
     addField,
@@ -30,23 +37,28 @@ const Form: Component<FormProps> = (_props) => {
     validateField,
     validate,
   }
-  const context: FormContextInstance = mergeProps(formExpose, props);
+  const context: FormContextInstance = mergeProps(formExpose, props)
 
-  const propsRef = props.ref as (el: FormInstance) => void;
-  propsRef?.(formExpose);
+  const propsRef = props.ref as (el: FormInstance) => void
+  propsRef?.(formExpose)
 
   const isValidatable = createMemo(() => {
-    const hasModel = !!props.model;
+    const hasModel = !!props.model
     if (!hasModel) {
-      debugWarn('Form', 'model is required for validate to work.');
+      debugWarn('Form', 'model is required for validate to work.')
     }
     return hasModel
-  });
-  createEffect(on(() => props.rules, () => {
-    if (props.validateOnRuleChange) {
-      validate().catch(debugWarn)
-    }
-  }))
+  })
+  createEffect(
+    on(
+      () => props.rules,
+      () => {
+        if (props.validateOnRuleChange) {
+          validate().catch(debugWarn)
+        }
+      }
+    )
+  )
   const scrollToField = (prop: FormItemProp) => {
     const field = filterFields(fields, prop)[0]
     if (field) {
@@ -54,10 +66,10 @@ const Form: Component<FormProps> = (_props) => {
     }
   }
   function addField(field: FormItemContextInstance) {
-    fields.push(field);
+    fields.push(field)
   }
   function removeField(field: FormItemContextInstance) {
-    fields.splice(fields.indexOf(field), 1);
+    fields.splice(fields.indexOf(field), 1)
   }
 
   function clearValidate(props: Arrayable<FormItemProp>) {
@@ -74,11 +86,11 @@ const Form: Component<FormProps> = (_props) => {
     return filteredFields
   }
   async function validate(callback?: FormValidateCallback) {
-    return validateField(undefined, callback);
+    return validateField(undefined, callback)
   }
   async function doValidateField(props: Arrayable<FormItemProp> = []) {
-    if (!isValidatable()) return false;
-    const fields = obtainValidateFields(props);
+    if (!isValidatable()) return false
+    const fields = obtainValidateFields(props)
     if (fields.length === 0) return true
     let validationErrors: ValidateFieldsError = {}
     for (const field of fields) {
@@ -94,10 +106,13 @@ const Form: Component<FormProps> = (_props) => {
     if (Object.keys(validationErrors).length === 0) return true
     return Promise.reject(validationErrors)
   }
-  async function validateField(modelProps: Arrayable<FormItemProp> = [], callback?: FormValidateCallback) {
-    const shouldThrow = !isFunction(callback);
+  async function validateField(
+    modelProps: Arrayable<FormItemProp> = [],
+    callback?: FormValidateCallback
+  ) {
+    const shouldThrow = !isFunction(callback)
     try {
-      const result = await doValidateField(modelProps);
+      const result = await doValidateField(modelProps)
       // When result is false meaning that the fields are not validatable
       if (result === true) {
         callback?.(result)
@@ -107,24 +122,36 @@ const Form: Component<FormProps> = (_props) => {
       const invalidFields = e as ValidateFieldsError
 
       if (props.scrollToError) {
-        scrollToField(Object.keys(invalidFields)[0]);
+        scrollToField(Object.keys(invalidFields)[0])
       }
       callback?.(false, invalidFields)
       return shouldThrow && Promise.reject(invalidFields)
     }
   }
 
-  function filterFields(fields: FormItemContextInstance[], props: Arrayable<FormItemProp>) {
-    const normalized = castArray(props);
+  function filterFields(
+    fields: FormItemContextInstance[],
+    props: Arrayable<FormItemProp>
+  ) {
+    const normalized = castArray(props)
     return normalized.length > 0
       ? fields.filter((field) => field.prop && normalized.includes(field.prop))
       : fields
   }
-  return <FormContext.Provider value={context}>
-    <form class={classNames(ns.b(), ns.m(formSize()), ns.m('label-' + props.labelPosition), { [ns.m('inline')]: props.inline })}>
-      {props.children}
-    </form>
-  </FormContext.Provider>
+  return (
+    <FormContext.Provider value={context}>
+      <form
+        class={classNames(
+          ns.b(),
+          ns.m(formSize()),
+          ns.m(`label-${props.labelPosition}`),
+          { [ns.m('inline')]: props.inline }
+        )}
+      >
+        {props.children}
+      </form>
+    </FormContext.Provider>
+  )
 }
 
-export default Form;
+export default Form

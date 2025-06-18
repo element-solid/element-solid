@@ -1,24 +1,24 @@
 {
   "name": "element-solid",
   "version": "0.0.0-dev.1",
-  "description": "A Component Library for Vue 3",
+  "description": "A fork of Element UI, for the Solid community",
   "keywords": [
     "element-plus",
     "element",
     "component library",
     "ui framework",
     "ui",
-    "vue"
+    "solid"
   ],
   "homepage": "https://element-plus.org/",
   "bugs": {
-    "url": "https://github.com/element-plus/element-plus/issues"
+    "url": "https://github.com/element-solid/element-solid/issues"
   },
   "license": "MIT",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/element-plus/element-plus.git"
+    "url": "git+https://github.com/element-solid/element-solid.git"
   },
   "publishConfig": {
     "access": "public"
@@ -32,7 +32,7 @@
     "lib/components/*/style/*"
   ],
   "peerDependencies": {
-    "vue": "^3.2.0"
+    "solid": "^1.9.7"
   },
   "dependencies": {
     "@ctrl/tinycolor": "^3.4.1",
@@ -40,25 +40,17 @@
     "@popperjs/core": "npm:@sxzz/popperjs-es@^2.11.7",
     "@types/lodash": "^4.14.182",
     "@types/lodash-es": "^4.17.6",
-    "@vueuse/core": "^9.1.0",
     "async-validator": "^4.2.5",
     "dayjs": "^1.11.13",
     "escape-html": "^1.0.3",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "^1.0.2",
-    "memoize-one": "^6.0.0",
     "normalize-wheel-es": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "*",
-    "csstype": "^2.6.20",
-    "vue": "^3.2.37",
-    "vue-router": "^4.0.16"
-  },
-  "vetur": {
-    "tags": "tags.json",
-    "attributes": "attributes.json"
+    "csstype": "^2.6.20"
   },
   "web-types": "web-types.json",
   "browserslist": [

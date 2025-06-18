@@ -1,8 +1,8 @@
 import { Component, createApp } from 'vue'
-import '@element-plus/theme-chalk/src/dark/css-vars.scss'
-import '@element-plus/theme-chalk/src/notification.scss'
-import '@element-plus/theme-chalk/src/message-box.scss'
-import '@element-plus/theme-chalk/src/message.scss'
+import '@element-solid/theme-chalk/src/dark/css-vars.scss'
+import '@element-solid/theme-chalk/src/notification.scss'
+import '@element-solid/theme-chalk/src/message-box.scss'
+import '@element-solid/theme-chalk/src/message.scss'
 ;(async () => {
   const apps = import.meta.glob<
     true,

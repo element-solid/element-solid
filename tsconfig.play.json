@@ -6,7 +6,6 @@
   },
   "include": [
     "packages",
-    "typings/global.d.ts",
     "typings/env.d.ts",
 
     // playground

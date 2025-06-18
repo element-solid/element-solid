@@ -16,7 +16,7 @@ import {
   PKG_CAMELCASE_NAME,
 } from '@element-solid/build-constants'
 import { epOutput, epRoot, localeRoot } from '@element-solid/build-utils'
-import { version } from '../../../../packages/element-plus/version'
+import { version } from '../../../../packages/element-solid/version'
 import { ElementPlusAlias } from '../plugins/element-plus-alias'
 import {
   formatBundleFilename,

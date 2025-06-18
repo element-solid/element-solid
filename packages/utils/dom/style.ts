@@ -39,11 +39,11 @@ export function classNames(
   })
   return classList.join(' ')
 }
-export function classList(cls: Recordable) {
+export function classList(cls: Record<string, any>) {
   return Object.keys(cls).reduce((o, i) => {
     o[i] = !!cls[i]
     return o
-  }, {} as Recordable<boolean>)
+  }, {} as Record<string, boolean>)
 }
 export const getStyle = (
   element: HTMLElement,

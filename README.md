@@ -1,2 +1,3 @@
 # element-solid
-Element Solid is a fork of Element UI, a Vue-based UI library, for the Solidjs community. 
+
+Element Solid is a fork of Element UI, for the Solid community.

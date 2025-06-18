@@ -9,7 +9,7 @@ import { pathRewriter, run } from '../utils'
 
 export const generateTypesDefinitions = async () => {
   const typesDir = path.join(buildOutput, 'types', 'packages')
-  const entryDir = path.join(typesDir, 'element-plus')
+  const entryDir = path.join(typesDir, 'element-solid')
   const entryFilePath = path.join(entryDir, 'index.d.ts')
   const tsDir = path.join(projRoot, 'node_modules', 'typescript')
   const tsConfigPath = path.join(projRoot, 'tsconfig.web.json')
@@ -17,7 +17,7 @@ export const generateTypesDefinitions = async () => {
 
   // Generate .d.ts files
   await run(
-    'npx vue-tsc -p tsconfig.web.json --declaration --emitDeclarationOnly --declarationDir dist/types'
+    'npx tsc -p tsconfig.web.json --declaration --emitDeclarationOnly --declarationDir dist/types'
   )
 
   // Rollup all .d.ts files into index.d.ts
@@ -43,7 +43,7 @@ export const generateTypesDefinitions = async () => {
           compilerOptions: {
             lib: tsConfig.config.compilerOptions.lib,
             paths: {
-              'element-plus': [entryFilePath],
+              'element-solid': [entryFilePath],
               '@element-solid/*': [`${typesDir}/*`],
             },
             skipLibCheck: true,
@@ -71,7 +71,7 @@ export const generateTypesDefinitions = async () => {
 
   await writeFile(entryFilePath, formattedText, 'utf8')
 
-  // "@element-solid" should be replaced with "element-plus"
+  // "@element-solid" should be replaced with "element-solid"
   const filePaths = await glob(`**/*.d.ts`, {
     cwd: typesDir,
     absolute: true,

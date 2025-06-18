@@ -1,5 +1,6 @@
 import { isFunction } from 'lodash-es'
 import { Accessor } from 'solid-js'
+import { Fn } from './typescript'
 
 export type MaybeAccessor<T> = Accessor<T | undefined> | T | undefined
 

@@ -7,7 +7,7 @@ FILE_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")/../packages" && pwd)
 re="[[:space:]]+"
 
 if [ "$#" -ne 1 ] || [[ $NAME =~ $re ]] || [ "$NAME" == "" ]; then
-  echo "Usage: pnpm gen \${name} with no space"
+  echo "Usage: pnpm gc \${name} with no space"
   exit 1
 fi
 
@@ -27,88 +27,55 @@ mkdir -p "$DIRNAME/src"
 mkdir -p "$DIRNAME/style"
 mkdir -p "$DIRNAME/__tests__"
 
-cat > $DIRNAME/src/$INPUT_NAME.vue <<EOF
-<template>
-  <div>
-    <slot />
-  </div>
-</template>
+cat > $DIRNAME/src/index.tsx <<EOF
+import { Component, mergeProps} from 'solid-js';
+import { useNamespace } from '@element-solid/hooks';
+import { classNames } from '@element-solid/utils';
+import { ${NAME}Props } from "./props";
 
-<script lang="ts" setup>
-import { ${PROP_NAME}Emits, ${PROP_NAME}Props } from './$INPUT_NAME'
+const defaultProps: Partial<${NAME}Props> = {};
 
-defineOptions({
-  name: 'El$NAME',
-})
+const ${NAME}: Component<${NAME}Props> = (_props) => {
+  const props = mergeProps(defaultProps, _props);
+  const ns = useNamespace('${NAME,,}');
 
-const props = defineProps(${PROP_NAME}Props)
-const emit = defineEmits(${PROP_NAME}Emits)
+  return <div class={classNames(ns.b())}></div>
+}
 
-// init here
-</script>
+export default ${NAME};
+
 EOF
 
-cat > $DIRNAME/src/$INPUT_NAME.ts <<EOF
-import { buildProps } from '@element-solid/utils'
+cat <<EOF >"$DIRNAME/src/props.ts"
+import { JSX } from "solid-js";
 
-import type { ExtractPropTypes } from 'vue'
+export interface ${NAME}Props extends JSX.HTMLAttributes<${NAME}Instance> {
 
-export const ${PROP_NAME}Props = buildProps({} as const)
-export type ${NAME}Props = ExtractPropTypes<typeof ${PROP_NAME}Props>
+}
 
-export const ${PROP_NAME}Emits = {}
-export type ${NAME}Emits = typeof ${PROP_NAME}Emits
-EOF
+export interface ${NAME}Instance {
 
-cat > $DIRNAME/src/instance.ts <<EOF
-import type $NAME from './$INPUT_NAME.vue'
-
-export type ${NAME}Instance = InstanceType<typeof $NAME> & unknown
+}
 EOF
 
 cat <<EOF >"$DIRNAME/index.ts"
-import { withInstall } from '@element-solid/utils'
-import $NAME from './src/$INPUT_NAME.vue'
-import type { SFCWithInstall } from '@element-solid/utils'
+export { default as ${NAME} } from './src/index';
+export * from './src/props';
 
-export const El$NAME: SFCWithInstall<typeof $NAME> = withInstall($NAME)
-export default El$NAME
-
-export * from './src/$INPUT_NAME'
-export type { ${NAME}Instance } from './src/instance'
 EOF
 
-cat > $DIRNAME/__tests__/$INPUT_NAME.test.tsx <<EOF
-import { mount } from '@vue/test-utils'
-import { describe, expect, test } from 'vitest'
-import $NAME from '../src/$INPUT_NAME.vue'
+# cat > $DIRNAME/style/index.ts <<EOF
+# import '@solid-ui/components/base/style'
+# import '@solid-ui/theme-chalk/src/$INPUT_NAME.scss'
+# EOF
 
-const AXIOM = 'Rem is the best girl'
+# cat > $DIRNAME/style/css.ts <<EOF
+# import '@solid-ui/components/base/style/css'
+# import '@solid-ui/theme-chalk/$INPUT_NAME.css'
+# EOF
 
-describe('$NAME.vue', () => {
-  test('render test', () => {
-    const wrapper = mount(() => <$NAME>{AXIOM}</$NAME>)
-
-    expect(wrapper.text()).toEqual(AXIOM)
-  })
-})
-EOF
-
-cat > $DIRNAME/style/index.ts <<EOF
-import '@element-solid/components/base/style'
-import '@element-solid/theme-chalk/src/$INPUT_NAME.scss'
-EOF
-
-cat > $DIRNAME/style/css.ts <<EOF
-import '@element-solid/components/base/style/css'
-import '@element-solid/theme-chalk/el-$INPUT_NAME.css'
-EOF
-
-cat > $FILE_PATH/theme-chalk/src/$INPUT_NAME.scss <<EOF
-EOF
+# cat > $FILE_PATH/theme-chalk/src/$INPUT_NAME.scss <<EOF
+# EOF
 
 perl -0777 -pi -e "s/\n\n/\nexport * from '.\/$INPUT_NAME'\n\n/" $FILE_PATH/components/index.ts
 
-TYPE_PATH=$(cd "$(dirname "${BASH_SOURCE[0]}")/../typings" && pwd)
-
-perl -0777 -pi -e "s/\n\s+}/\n    El$NAME: typeof import('element-plus')['El$NAME']\n  }/" $TYPE_PATH/global.d.ts

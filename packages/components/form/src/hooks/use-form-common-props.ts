@@ -1,12 +1,12 @@
 import { createMemo } from 'solid-js'
 import { ComponentSize } from '@element-solid/constants/size'
 import { MaybeAccessor, unAccessor } from '@element-solid/hooks/type'
-import { useFormItem } from './use-form-item'
 import { useGlobalConfig } from '@element-solid/hooks'
+import { useFormItem } from './use-form-item'
 
 export function useSize(
   props: { size?: ComponentSize },
-  fallback?: MaybeAccessor<ComponentSize>
+  fallback?: MaybeAccessor<ComponentSize | undefined>
 ) {
   const { form, formItem } = useFormItem()
   return createMemo(
@@ -21,7 +21,7 @@ export function useSize(
 
 export function useDisabled(
   props: { disabled?: boolean },
-  fallback?: MaybeAccessor<boolean>
+  fallback?: MaybeAccessor<boolean | undefined>
 ) {
   const { form } = useFormItem()
   return createMemo(
