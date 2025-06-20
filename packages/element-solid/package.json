@@ -1,6 +1,6 @@
 {
   "name": "element-solid",
-  "version": "0.0.0-dev.2",
+  "version": "0.0.0-dev.3",
   "description": "A fork of Element UI, for the Solid community",
   "keywords": [
     "element-plus",
@@ -15,11 +15,54 @@
     "url": "https://github.com/element-solid/element-solid/issues"
   },
   "license": "MIT",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "es/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.mjs",
+      "require": "./lib/index.js"
+    },
+    "./global": {
+      "types": "./global.d.ts"
+    },
+    "./es": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.mjs"
+    },
+    "./lib": {
+      "types": "./lib/index.d.ts",
+      "require": "./lib/index.js"
+    },
+    "./es/*.mjs": {
+      "types": "./es/*.d.ts",
+      "import": "./es/*.mjs"
+    },
+    "./es/*": {
+      "types": [
+        "./es/*.d.ts",
+        "./es/*/index.d.ts"
+      ],
+      "import": "./es/*.mjs"
+    },
+    "./lib/*.js": {
+      "types": "./lib/*.d.ts",
+      "require": "./lib/*.js"
+    },
+    "./lib/*": {
+      "types": [
+        "./lib/*.d.ts",
+        "./lib/*/index.d.ts"
+      ],
+      "require": "./lib/*.js"
+    },
+    "./*": "./*"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/element-solid/element-solid.git"
   },
+  "types": "es/index.d.ts",
   "publishConfig": {
     "access": "public"
   },
