@@ -1,12 +1,10 @@
 import path from 'path'
 import { series } from 'gulp'
 import { rollup } from 'rollup'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import VueMacros from 'unplugin-vue-macros/rollup'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import esbuild from 'rollup-plugin-esbuild'
+import AutoImport from 'unplugin-auto-import/rollup'
 import glob from 'fast-glob'
 import { epRoot, excludeFiles, pkgRoot } from '@element-solid/build-utils'
 import { generateExternal, withTaskName, writeBundles } from '../utils'
@@ -18,22 +16,6 @@ import type { OutputOptions, Plugin } from 'rollup'
 
 const plugins: Plugin[] = [
   ElementPlusAlias(),
-  VueMacros({
-    setupComponent: false,
-    setupSFC: false,
-    plugins: {
-      vue: vue({
-        isProduction: true,
-        template: {
-          compilerOptions: {
-            hoistStatic: false,
-            cacheHandlers: false,
-          },
-        },
-      }),
-      vueJsx: vueJsx(),
-    },
-  }),
   nodeResolve({
     extensions: ['.mjs', '.js', '.json', '.ts'],
   }),
@@ -41,15 +23,21 @@ const plugins: Plugin[] = [
   esbuild({
     sourceMap: true,
     target,
-    loaders: {
-      '.vue': 'ts',
+    jsx: 'transform',
+    jsxFactory: 'h',
+    jsxFragment: 'Fragment',
+  }),
+  AutoImport({
+    imports: {
+      'solid-js/h': [['default', 'h']],
+      'solid-js/h/jsx-runtime': ['Fragment'],
     },
   }),
 ]
 
 async function buildModulesComponents() {
   const input = excludeFiles(
-    await glob(['**/*.{js,ts,vue}', '!**/style/(index|css).{js,ts,vue}'], {
+    await glob(['**/*.{js,ts}', '!**/style/(index|css).{js,ts,vue}'], {
       cwd: pkgRoot,
       absolute: true,
       onlyFiles: true,

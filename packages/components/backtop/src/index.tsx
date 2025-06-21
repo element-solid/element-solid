@@ -17,8 +17,9 @@ const Backtop: Component<BacktopProps> = (_props) => {
   const props = mergeProps(defaultProps, _props)
   const ns = useNamespace('backtop')
   const [visible, setVisible] = createSignal(false)
-  const container = document
-  let el: HTMLElement | null = document.documentElement
+
+  let container: Document
+  let el: HTMLElement | null
 
   const backTopStyle = () => ({
     right: addUnit(props.right),
@@ -27,11 +28,14 @@ const Backtop: Component<BacktopProps> = (_props) => {
   })
 
   onMount(() => {
+    container = document
     if (props.target) {
       el = document.querySelector(props.target)
       if (!el) {
         throwError('Bactop', `target is not existed: ${props.target}`)
       }
+    } else {
+      el = document.documentElement
     }
     const handleScrollThrottled = throttle(handleScroll, 300)
     useEventListener(container, 'scroll', handleScrollThrottled)

@@ -1,4 +1,4 @@
-import { isString } from 'lodash'
+import { isString } from 'lodash-es'
 import { usePopup } from '@element-solid/hooks'
 import { isJSXElement } from '@element-solid/utils'
 import {

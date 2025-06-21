@@ -1,12 +1,14 @@
 import { debounce, isString } from 'lodash-es'
 import {
   Component,
+  Show,
   children,
   createEffect,
   createSignal,
   mergeProps,
   on,
   onCleanup,
+  onMount,
 } from 'solid-js'
 import {
   Middleware,
@@ -19,7 +21,7 @@ import {
 import { Transition } from 'solid-transition-group'
 import { Portal } from 'solid-js/web'
 import { useClickOutside, useNamespace } from '@element-solid/hooks'
-import { Arrayable, Fn, classNames } from '@element-solid/utils'
+import { Arrayable, Fn, classNames, debugWarn } from '@element-solid/utils'
 import { PopperInstance, PopperProps } from './props'
 
 type BaseDir = 'left' | 'right' | 'top' | 'bottom'
@@ -33,7 +35,6 @@ const defaultProps: Partial<PopperProps> = {
   arrow: true,
   effect: 'light',
   transition: `${ns.namespace}-fade-in-linear`,
-  mountTo: document.body,
 }
 
 const showEventMap: Record<
@@ -61,7 +62,19 @@ const Popper: Component<PopperProps> = (_props) => {
   let contentRef: HTMLElement | null = null
   let arrowRef: HTMLElement | null = null
   let cleanup: Fn | undefined
+  let mountTo: HTMLElement | null | undefined
 
+  onMount(() => {
+    mountTo = isString(props.mountTo)
+      ? (document.body.querySelector(props.mountTo) as HTMLElement)
+      : props.mountTo
+    if (!mountTo && props.mountTo) {
+      debugWarn('Popper', `'${props.mountTo}' is not existed`)
+    }
+    if (!mountTo) {
+      mountTo = document.body
+    }
+  })
   const mount = () =>
     isString(props.mountTo)
       ? document.body.querySelector(props.mountTo)
@@ -182,7 +195,7 @@ const Popper: Component<PopperProps> = (_props) => {
   return (
     <>
       {resolvedChildren()}
-      {!props.disabled && visible() && (
+      <Show when={!props.disabled && visible()}>
         <Portal mount={mount()!}>
           <Transition name={props.transition}>
             <div
@@ -200,7 +213,7 @@ const Popper: Component<PopperProps> = (_props) => {
             </div>
           </Transition>
         </Portal>
-      )}
+      </Show>
     </>
   )
 }

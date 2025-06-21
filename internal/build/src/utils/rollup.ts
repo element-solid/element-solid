@@ -8,7 +8,7 @@ export const generateExternal = async (options: { full: boolean }) => {
   return (id: string) => {
     const packages: string[] = [...peerDependencies]
     if (!options.full) {
-      packages.push('@vue', ...dependencies)
+      packages.push(...dependencies)
     }
 
     return [...new Set(packages)].some(
