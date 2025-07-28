@@ -88,7 +88,7 @@ const Drawer: Component<DrawerProps> = (_props) => {
   }
 
   return (
-    <Show when={visible()}>
+    <Show when={visible() && !isServer}>
       <Portal mount={document.body}>
         <Transition
           name={ns.b('fade')}

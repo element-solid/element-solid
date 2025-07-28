@@ -6,9 +6,9 @@ import {
   createSignal,
   mergeProps,
 } from 'solid-js'
-import { Portal, isServer } from 'solid-js/web'
 import { Transition } from 'solid-transition-group'
 import { Position } from 'packages/hooks/type'
+import { Portal, isServer } from 'solid-js/web'
 import {
   useDraggable,
   useEscapeKeydown,
@@ -114,9 +114,9 @@ const Dialog: Component<DialogProps> = (_props) => {
   }
 
   return (
-    <Portal mount={document.body}>
-      <Transition name="dialog-fade" appear>
-        <Show when={visible()}>
+    <Show when={visible() && !isServer}>
+      <Portal mount={document.body}>
+        <Transition name="dialog-fade" appear>
           <Overlay
             mask={props.mask}
             zIndex={zIndex()}
@@ -170,9 +170,9 @@ const Dialog: Component<DialogProps> = (_props) => {
               </div>
             </div>
           </Overlay>
-        </Show>
-      </Transition>
-    </Portal>
+        </Transition>
+      </Portal>
+    </Show>
   )
 }
 
