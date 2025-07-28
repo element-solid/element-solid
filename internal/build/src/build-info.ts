@@ -4,12 +4,12 @@ import { epOutput } from '@element-solid/build-utils'
 
 import type { ModuleFormat } from 'rollup'
 
-export const modules = ['esm', 'cjs'] as const
+export const modules = ['es', 'cjs'] as const
 export type Module = (typeof modules)[number]
 export interface BuildInfo {
   module: 'ESNext' | 'CommonJS'
   format: ModuleFormat
-  ext: 'mjs' | 'cjs' | 'js'
+  ext: 'mjs' | 'cjs' | 'js' | 'ts'
   output: {
     /** e.g: `es` */
     name: string
@@ -24,10 +24,10 @@ export interface BuildInfo {
 }
 
 export const buildConfig: Record<Module, BuildInfo> = {
-  esm: {
+  es: {
     module: 'ESNext',
-    format: 'esm',
-    ext: 'mjs',
+    format: 'es',
+    ext: 'ts',
     output: {
       name: 'es',
       path: path.resolve(epOutput, 'es'),

@@ -78,7 +78,7 @@ export const generateTypesDefinitions = async () => {
   })
   const rewriteTasks = filePaths.map(async (filePath) => {
     const content = await readFile(filePath, 'utf8')
-    await writeFile(filePath, pathRewriter('esm')(content), 'utf8')
+    await writeFile(filePath, pathRewriter('es')(content), 'utf8')
   })
   await Promise.all(rewriteTasks)
 

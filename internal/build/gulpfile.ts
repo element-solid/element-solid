@@ -32,7 +32,7 @@ export const copyTypesDefinitions: TaskFunction = (done) => {
       copy(src, buildConfig[module].output.path, { recursive: true })
     )
 
-  return parallel(copyTypes('esm'), copyTypes('cjs'))(done)
+  return parallel(copyTypes('es'))(done)
 }
 
 export const copyFullStyle = async () => {

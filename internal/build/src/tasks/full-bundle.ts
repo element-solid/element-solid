@@ -3,13 +3,12 @@ import { nodeResolve } from '@rollup/plugin-node-resolve'
 import { rollup } from 'rollup'
 import replace from '@rollup/plugin-replace'
 import commonjs from '@rollup/plugin-commonjs'
-import vue from '@vitejs/plugin-vue'
-import VueMacros from 'unplugin-vue-macros/rollup'
-import vueJsx from '@vitejs/plugin-vue-jsx'
 import esbuild, { minify as minifyPlugin } from 'rollup-plugin-esbuild'
 import { parallel } from 'gulp'
 import glob from 'fast-glob'
 import { camelCase, upperFirst } from 'lodash-unified'
+import { build } from 'vite'
+import solidPlugin from 'vite-plugin-solid'
 import {
   PKG_BRAND_NAME,
   PKG_CAMELCASE_LOCAL_NAME,
@@ -33,22 +32,6 @@ const banner = `/*! ${PKG_BRAND_NAME} v${version} */\n`
 async function buildFullEntry(minify: boolean) {
   const plugins: Plugin[] = [
     ElementPlusAlias(),
-    VueMacros({
-      setupComponent: false,
-      setupSFC: false,
-      plugins: {
-        vue: vue({
-          isProduction: true,
-          template: {
-            compilerOptions: {
-              hoistStatic: false,
-              cacheHandlers: false,
-            },
-          },
-        }),
-        vueJsx: vueJsx(),
-      },
-    }),
     nodeResolve({
       extensions: ['.mjs', '.js', '.json', '.ts'],
     }),
@@ -78,40 +61,29 @@ async function buildFullEntry(minify: boolean) {
       })
     )
   }
-
-  const bundle = await rollup({
-    input: path.resolve(epRoot, 'index.ts'),
-    plugins,
-    external: await generateExternal({ full: true }),
-    treeshake: true,
-  })
-  await writeBundles(bundle, [
-    {
-      format: 'umd',
-      file: path.resolve(
-        epOutput,
-        'dist',
-        formatBundleFilename('index.full', minify, 'js')
-      ),
-      exports: 'named',
-      name: PKG_CAMELCASE_NAME,
-      globals: {
-        vue: 'Vue',
+  await build({
+    plugins: [solidPlugin()],
+    build: {
+      lib: {
+        entry: path.resolve(epRoot, 'index.ts'),
+        formats: ['umd', 'es'],
+        fileName(format) {
+          return `index.full${minify ? '.min' : ''}.${
+            format === 'es' ? 'mjs' : 'js'
+          }`
+        },
+        name: PKG_CAMELCASE_NAME,
       },
       sourcemap: minify,
-      banner,
+      outDir: path.resolve(epOutput, 'dist'),
+      // write: false,
+      rollupOptions: {
+        treeshake: { moduleSideEffects: false },
+        external: await generateExternal({ full: true }),
+        // format: config.format,
+      },
     },
-    {
-      format: 'esm',
-      file: path.resolve(
-        epOutput,
-        'dist',
-        formatBundleFilename('index.full', minify, 'mjs')
-      ),
-      sourcemap: minify,
-      banner,
-    },
-  ])
+  })
 }
 
 async function buildFullLocale(minify: boolean) {

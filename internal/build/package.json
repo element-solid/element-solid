@@ -38,6 +38,8 @@
   },
   "devDependencies": {
     "@pnpm/types": "^8.4.0",
+    "@rollup/plugin-babel": "^6.0.4",
+    "babel-preset-solid": "^1.9.6",
     "tsx": "^4.19.3",
     "unbuild": "^2.0.0",
     "unplugin-auto-import": "^19.3.0"
