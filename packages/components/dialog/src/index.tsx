@@ -69,7 +69,6 @@ const Dialog: Component<DialogProps> = (_props) => {
   }
   {
     ;(props.ref as (el: DialogInstance) => void)?.({
-      open: doOpen,
       close: doClose,
       visible,
     })
