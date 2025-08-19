@@ -35,7 +35,7 @@ const Drawer: Component<DrawerProps> = (_props) => {
   const props = mergeProps(defaultProps, _props)
   const ns = useNamespace('drawer')
   const { t } = useLocale()
-  const [zIndex, setZIndex] = createSignal(props.zIndex || useZIndex())
+  const zIndex = props.zIndex || useZIndex()
   const [visible, setVisible] = createSignal(!!props.visible)
   // let drawerRef: HTMLDivElement;
   // let draggerRef: HTMLDivElement;
@@ -60,15 +60,12 @@ const Drawer: Component<DrawerProps> = (_props) => {
 
   {
     ;(props.ref as (el: DrawerInstance) => void)?.({
-      open: doOpen,
       close: doClose,
       visible,
     })
   }
 
   function doOpen() {
-    if (isServer) return
-    setZIndex(props.zIndex || useZIndex())
     setVisible(true)
   }
   function doClose() {
@@ -88,19 +85,19 @@ const Drawer: Component<DrawerProps> = (_props) => {
   }
 
   return (
-    <Show when={visible() && !isServer}>
-      <Portal mount={document.body}>
-        <Transition
-          name={ns.b('fade')}
-          appear
-          onAfterEnter={props.onOpen}
-          onAfterExit={props.onClose}
-        >
-          <Overlay
-            mask={props.mask}
-            zIndex={zIndex()}
-            onClick={handleMaskClick}
-          >
+    <Portal mount={document.body}>
+      <Transition
+        name={ns.b('fade')}
+        appear
+        enterClass={ns.b('fade-enter-from')}
+        enterActiveClass={ns.b('fade-enter-active')}
+        exitActiveClass={ns.b('fade-leave-active')}
+        exitToClass={ns.b('fade-leave-to')}
+        onAfterEnter={props.onOpen}
+        onAfterExit={props.onClose}
+      >
+        <Show when={visible() && !isServer}>
+          <Overlay mask={props.mask} zIndex={zIndex} onClick={handleMaskClick}>
             <div
               role="dialog"
               aria-model="true"
@@ -138,9 +135,9 @@ const Drawer: Component<DrawerProps> = (_props) => {
               </Show>
             </div>
           </Overlay>
-        </Transition>
-      </Portal>
-    </Show>
+        </Show>
+      </Transition>
+    </Portal>
   )
 }
 
